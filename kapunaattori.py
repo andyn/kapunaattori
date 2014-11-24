@@ -2,6 +2,7 @@
 
 import os
 from random import choice
+import sys
 
 WORDLIST = "kotus_sanat.txt"
 
