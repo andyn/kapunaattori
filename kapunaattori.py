@@ -18,9 +18,8 @@ def create_cache_file(input, output_filename, filter):
 def create_cache_dir(cache_location):
 	try:
 		os.mkdir(cache_location)
-		print("Cache does not exist, creating", file=sys.stderr)
 	except OSError:
-		return
+		pass
 	
 	# Cache files
 	with open(WORDLIST, "r") as word_file:
