@@ -18,33 +18,52 @@ CACHE_DIRECTORY = "{}/cache".format(THIS_DIRECTORY)
 WORDLIST_DIRECTORY = "{}/wordlists".format(THIS_DIRECTORY)
 
 
-cache = WordCache(CACHE_DIRECTORY, WORDLIST_DIRECTORY)
-
-# Use either a user-supplied word or the default, "kapu"
-if len(sys.argv) > 1:
-	word = sys.argv[1].lower()
-else:
+def main():
+	cache = WordCache(CACHE_DIRECTORY, WORDLIST_DIRECTORY)
+	params = sys.argv
+	num_words = 1
 	word = "kapu"
 
-# Try different split positions
-try:
-	parts = list(split_word(word))
-except Exception:
-	print("You need at least two letters to get any meaningful results", file=sys.stderr)
-	sys.exit()
- 
-for (first, second) in parts:
+	# Support multiple words at once
+	if len(params) > 2 and params[1] == "-n":
+		try:
+			num_words = int(params[2])
+		except ValueError:
+			print("{} is not a valid number".format(params[2]), file=sys.stderr)
+			sys.exit(1)
+		params.pop(1)
+		params.pop(1)
+
+	# Allow the user to specify the word
+	if len(params) > 1:
+		word = params[1].lower()
+		params.pop(1)
+
+	# Get all possible positions to split the word
 	try:
-		prefixes = cache.open_prefix(first).readlines()
-		suffixes = cache.open_suffix(second).readlines()
+		parts = list(split_word(word))
+	except Exception:
+		print("You need at least two letters to get any meaningful results", file=sys.stderr)
+		sys.exit(1)
+	
+	while num_words > 0 and len(parts) > 0:
+		first, second = choice(parts)
+		try:
+			prefixes = cache.open_prefix(first).readlines()
+			suffixes = cache.open_suffix(second).readlines()
 
-		print("{}{}".format(
-			choice(prefixes).rstrip(),
-			choice(suffixes).rstrip()))
-		break
+			print("{}{}".format(
+				choice(prefixes).rstrip(),
+				choice(suffixes).rstrip()))
+			num_words -= 1
 
-	except IndexError:
-		# Either of the two random.choices got an empty string,
-		# so try again with another permutation
-		pass
+		except IndexError:
+			# Either of the two random.choices got an empty string,
+			# so try again with another permutation. Don't try this one again
+			parts.remove((first, second))
+			pass
+
+
+if __name__ == "__main__":
+	main()
 
