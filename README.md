@@ -1,21 +1,43 @@
 Kapunaattori
 ============
 
-It creates funny word combinations!
+Creates funny word pairings from lists of words.
 
-It also creates a temporary cache directory to its location.
-If you change the source file list, remove the cache dir before running the script again.
+You can add extra wordlists to the wordlists/ directory. The program automatically detects any changes
+and updates its internal cache.
 
-Usage example:
---------------
 
-All of these are real.
+Usage
+-----
 
-    $ ./kapunaattori.py
+Get a single result with "kapu" in the middle:
+
+    $ ./kapunaattori
     luokkapuli
-    $ ./kapunaattori.py
-    lekapuinti
-    $ ./kapunaattori.py
-    silakkapunkka
-    $ ./kapunaattori.py
-    neurolingvistiikkapunakoralli
+
+You can specify a custom word:
+
+    $ ./kapunaattori arb
+    kuningatarbariumpuuro
+
+You can also get multiple results at once with -n <number> 
+
+    $ ./kapunaattori.py -n 5 poopo
+    syaanivetyhappoopossumi
+    apropoopopkulttuuri
+    jippoopo
+    arseenihappoopo
+    vauvasampooporsastella
+
+
+Feedback and bug reports
+------------------------
+
+Use the bug tracker provided by GitHub, please.
+
+
+Licensing
+---------
+
+Public domain. For full text, see the accompanying LICENSE file.
+
