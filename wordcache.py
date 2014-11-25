@@ -48,7 +48,7 @@ class WordCache(object):
 		source_files = [open(f, "r") for f in source_filenames]
 		for source in source_files:
 			for line in source:
-				stripped = line.rstrip()
+				stripped = line.rstrip().lower()
 				if filter(stripped):
 					target.write("{}\n".format(stripped))
 			source.close()

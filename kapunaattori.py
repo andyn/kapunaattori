@@ -22,7 +22,7 @@ cache = WordCache(CACHE_DIRECTORY, WORDLIST_DIRECTORY)
 
 # Use either a user-supplied word or the default, "kapu"
 if len(sys.argv) > 1:
-	word = sys.argv[1]
+	word = sys.argv[1].lower()
 else:
 	word = "kapu"
 
