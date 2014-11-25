@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 
+from __future__ import print_function
 import os
 from random import choice
 import sys
 
-WORDLIST = "kotus_sanat.txt"
+
+# The directory that contains this script file
+THIS_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+CACHE_DIRECTORY = "{}/cache".format(THIS_DIRECTORY)
+WORD_FILE = "{}/kotus_sanat.txt".format(THIS_DIRECTORY)
 
 
 def create_cache_file(input, output_filename, filter):
@@ -22,7 +27,7 @@ def create_cache_dir(cache_location):
 		return
 	
 	# Cache files
-	with open(WORDLIST, "r") as word_file:
+	with open(WORD_FILE, "r") as word_file:
 		words = word_file.readlines()
 		filters = [
 			# Words that end in "ka"
@@ -41,11 +46,9 @@ def create_cache_dir(cache_location):
 
 
 # File cache dir
-file_location = os.path.dirname(os.path.realpath(__file__))
-cache_location = "{}/cache".format(file_location)
-create_cache_dir(cache_location)
+create_cache_dir(CACHE_DIRECTORY)
 
-ka = open("{}/ka.txt".format(cache_location), "r").readlines()
-pu = open("{}/pu.txt".format(cache_location), "r").readlines()
+ka = open("{}/ka.txt".format(CACHE_DIRECTORY), "r").readlines()
+pu = open("{}/pu.txt".format(CACHE_DIRECTORY), "r").readlines()
 
 print("{}{}".format(choice(ka).rstrip(), choice(pu).rstrip()))
