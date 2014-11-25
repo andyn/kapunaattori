@@ -26,8 +26,14 @@ if len(sys.argv) > 1:
 else:
 	word = "kapu"
 
-# Try ones split in the middle first
-for (first, second) in split_word(word):
+# Try different split positions
+try:
+	parts = list(split_word(word))
+except Exception:
+	print("You need at least two letters to get any meaningful results", file=sys.stderr)
+	sys.exit()
+ 
+for (first, second) in parts:
 	try:
 		prefixes = cache.open_prefix(first).readlines()
 		suffixes = cache.open_suffix(second).readlines()
