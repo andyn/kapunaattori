@@ -19,7 +19,7 @@ def create_cache_dir(cache_location):
 	try:
 		os.mkdir(cache_location)
 	except OSError:
-		pass
+		return
 	
 	# Cache files
 	with open(WORDLIST, "r") as word_file:
