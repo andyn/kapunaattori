@@ -31,10 +31,8 @@ class WordCache(object):
 		# Remove and recreate cache directories if needed
 		prefix_dir = "{}/prefix".format(cache_directory)
 		suffix_dir = "{}/suffix".format(cache_directory)
-		if self.remove_if_older_than(prefix_dir, wordlist_directory):
-			print("Word lists have been updated, cleaning prefixes", file=sys.stderr)
-		if self.remove_if_older_than(suffix_dir, wordlist_directory):
-			print("Word lists have been updated, cleaning suffixes", file=sys.stderr)
+		self.remove_if_older_than(prefix_dir, wordlist_directory)
+		self.remove_if_older_than(suffix_dir, wordlist_directory)
 		self.prefixes = Directory(prefix_dir)
 		self.suffixes = Directory(suffix_dir)
 		self.wordlists = wordlist_directory
@@ -77,7 +75,6 @@ class WordCache(object):
 			pass
 
 		# Does not exist, create
-		print("Prefixes for '{}' not found, creating".format(name), file=sys.stderr)
 		target = self.prefixes.open(name, "w")
 		self.create_file(target, lambda l: l.endswith(name))
 		return self.prefixes.open(name, "r")
@@ -89,7 +86,6 @@ class WordCache(object):
 			pass
 
 		# Does not exist, create
-		print("Suffixes for '{}' not found, creating".format(name), file=sys.stderr)
 		target = self.suffixes.open(name, "w")
 		self.create_file(target, lambda l: l.startswith(name))
 		return self.suffixes.open(name, "r")
