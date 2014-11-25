@@ -19,11 +19,13 @@ class Directory(object):
 		except:  # FIXME Pokemon exceptions because ocumentation says "except error" but it does not work
 			# Already exists
 			pass
+		self.open_files = {}
 
-	def open(self, file, *args, **kwargs):
-		filename = "{}/{}".format(self.directory, file)
-		return open(filename, *args, **kwargs)
-
+	def open(self, name, *args, **kwargs):
+		filename = "{}/{}".format(self.directory, name)
+		handle = open(filename, *args, **kwargs)
+		return handle
+		
 
 # Caches files from a certain directory
 class WordCache(object):
@@ -36,6 +38,8 @@ class WordCache(object):
 		self.prefixes = Directory(prefix_dir)
 		self.suffixes = Directory(suffix_dir)
 		self.wordlists = wordlist_directory
+		self.cached_prefixes = {}
+		self.cached_suffixes = {}
 
 	def create_file(self, target, filter):
 		from os import listdir
@@ -68,26 +72,43 @@ class WordCache(object):
 		
 		return False
 
-	def open_prefix(self, name):
+	def open(self, directory, name, filter):
 		try:
-			return self.prefixes.open(name, "r")
+			return directory.open(name, "r")
 		except IOError:
 			pass
 
-		# Does not exist, create
-		target = self.prefixes.open(name, "w")
-		self.create_file(target, lambda l: l.endswith(name))
-		return self.prefixes.open(name, "r")
+		# File does not exist, create
+		target = directory.open(name, "w")
+		self.create_file(target, filter)
+
+		# Reopen the newly created file
+		return directory.open(name, "r")
+
+	def open_prefix(self, name):
+		return self.open(self.prefixes, name, lambda l: l.endswith(name))
 					
 	def open_suffix(self, name):
-		try:
-			return self.suffixes.open(name, "r")
-		except IOError:
-			pass
+		return self.open(self.suffixes, name, lambda l: l.startswith(name))
 
-		# Does not exist, create
-		target = self.suffixes.open(name, "w")
-		self.create_file(target, lambda l: l.startswith(name))
-		return self.suffixes.open(name, "r")
+	# TODO refactor these two into one large function
+	def read_prefix(self, name):
+		cached = self.cached_prefixes.get(name)
+		if cached:
+			return cached
 
+		handle = self.open_prefix(name)
+		lines = handle.readlines()
+		self.cached_prefixes[name] = lines
+		return lines
 
+	def read_suffix(self, name):
+		cached = self.cached_suffixes.get(name)
+		if cached:
+			return cached
+
+		handle = self.open_suffix(name)
+		lines = handle.readlines()
+		self.cached_suffixes[name] = lines
+		return lines
+	

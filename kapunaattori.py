@@ -49,8 +49,8 @@ def main():
 	while num_words > 0 and len(parts) > 0:
 		first, second = choice(parts)
 		try:
-			prefixes = cache.open_prefix(first).readlines()
-			suffixes = cache.open_suffix(second).readlines()
+			prefixes = cache.read_prefix(first)
+			suffixes = cache.read_suffix(second)
 
 			print("{}{}".format(
 				choice(prefixes).rstrip(),
