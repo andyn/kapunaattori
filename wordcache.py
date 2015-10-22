@@ -9,13 +9,17 @@ import time
 
 # A simple class that allows opening files from a certain directory.
 # Makes sure that the directory exists.
+
+
 class Directory(object):
 
     def __init__(self, base_directory):
         try:
             self.directory = base_directory
             os.makedirs(self.directory)
-        except:  # FIXME Pokemon exceptions because ocumentation says "except error" but it does not work
+        # FIXME Pokemon exceptions because ocumentation says "except error" but
+        # it does not work
+        except:
             # Already exists
             pass
         self.open_files = {}
