@@ -16,6 +16,7 @@ THIS_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 CACHE_DIRECTORY = "{}/cache".format(THIS_DIRECTORY)
 WORDLIST_DIRECTORY = "{}/wordlists".format(THIS_DIRECTORY)
 
+
 def main():
     cache = WordCache(CACHE_DIRECTORY, WORDLIST_DIRECTORY)
     params = sys.argv
