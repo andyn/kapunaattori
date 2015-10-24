@@ -23,12 +23,14 @@ def main():
     num_words = 1
     word = "kapu"
 
-    parser = argparse.ArgumentParser(description="Creates funny word pairings from lists of words.")
-    parser.add_argument("word", metavar="W", type=str, nargs=1, help="the word to use")
+    parser = argparse.ArgumentParser(description="Creates funny word pairings "
+                                     "from lists of words. The default word is kapu.")
+    parser.add_argument("word", type=str, nargs='?', help="the word to use")
     parser.add_argument("-n", type=int, help="number of results to generate")
     args = parser.parse_args()
 
-    word = args.word[0].lower()
+    if args.word:
+        word = args.word.lower()
     if args.n:
         num_words = args.n
 
