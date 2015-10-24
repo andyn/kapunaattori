@@ -3,9 +3,10 @@
 
 from __future__ import print_function
 import os
+import sys
+import argparse
 from random import choice
 from splitword import split_word
-import sys
 from wordcache import WordCache
 
 
@@ -19,27 +20,17 @@ WORDLIST_DIRECTORY = "{}/wordlists".format(THIS_DIRECTORY)
 
 def main():
     cache = WordCache(CACHE_DIRECTORY, WORDLIST_DIRECTORY)
-    params = sys.argv
     num_words = 1
     word = "kapu"
 
-    # Support multiple words at once
-    if len(params) > 2 and params[1] == "-n":
-        try:
-            num_words = int(params[2])
-        except ValueError:
-            print(
-                "{} is not a valid number".format(
-                    params[2]),
-                file=sys.stderr)
-            sys.exit(1)
-        params.pop(1)
-        params.pop(1)
+    parser = argparse.ArgumentParser(description="Creates funny word pairings from lists of words.")
+    parser.add_argument("word", metavar="W", type=str, nargs=1, help="the word to use")
+    parser.add_argument("-n", type=int, help="number of results to generate")
+    args = parser.parse_args()
 
-    # Allow the user to specify the word
-    if len(params) > 1:
-        word = params[1].lower()
-        params.pop(1)
+    word = args.word[0].lower()
+    if args.n:
+        num_words = args.n
 
     # Get all possible positions to split the word
     try:
