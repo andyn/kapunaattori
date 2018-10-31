@@ -52,15 +52,12 @@ def main():
                 word = choice(words)
                 words.remove(word)
                 match = word.rstrip()
-            elif second == "":
-                words = cache.read_matches(first)
-                word = choice(words)
-                words.remove(word)
-                match = word.rstrip()
             else:
                 prefixes = cache.read_prefix(first)
+                prefix = choice(prefixes)
                 suffixes = cache.read_suffix(second)
-                match = f"{choice(prefixes).rstrip()}{choice(suffixes).rstrip()}"
+                suffix = choice(suffixes)
+                match = f"{prefix.rstrip()}{suffix.rstrip()}"
 
             print(match)
             num_words -= 1
