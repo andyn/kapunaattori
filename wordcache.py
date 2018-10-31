@@ -25,7 +25,7 @@ class Directory(object):
         self.open_files = {}
 
     def open(self, name, *args, **kwargs):
-        filename = "{}/{}".format(self.directory, name)
+        filename = f"{self.directory}/{name}"
         handle = open(filename, *args, **kwargs)
         return handle
 
@@ -35,9 +35,9 @@ class WordCache(object):
 
     def __init__(self, cache_directory, wordlist_directory):
         # Remove and recreate cache directories if needed
-        prefix_dir = "{}/prefix".format(cache_directory)
-        suffix_dir = "{}/suffix".format(cache_directory)
-        match_dir = "{}/matches".format(cache_directory)
+        prefix_dir = f"{cache_directory}/prefix"
+        suffix_dir = f"{cache_directory}/suffix"
+        match_dir = f"{cache_directory}/matches"
         self.remove_if_older_than(prefix_dir, wordlist_directory)
         self.remove_if_older_than(suffix_dir, wordlist_directory)
         self.remove_if_older_than(match_dir, wordlist_directory)
@@ -61,7 +61,7 @@ class WordCache(object):
             for line in source:
                 stripped = line.rstrip().lower()
                 if filter(stripped):
-                    target.write("{}\n".format(stripped))
+                    target.write(f"{stripped}\n")
             source.close()
 
     @staticmethod

@@ -14,8 +14,8 @@ from wordcache import WordCache
 THIS_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
 # Cache and word list directories. Change if you want them somewhere else
-CACHE_DIRECTORY = "{}/cache".format(THIS_DIRECTORY)
-WORDLIST_DIRECTORY = "{}/wordlists".format(THIS_DIRECTORY)
+CACHE_DIRECTORY = f"{THIS_DIRECTORY}/cache"
+WORDLIST_DIRECTORY = f"{THIS_DIRECTORY}/wordlists"
 
 
 def main():
@@ -23,8 +23,8 @@ def main():
     num_words = 1
     word = "kapu"
 
-    parser = argparse.ArgumentParser(description="Creates funny word pairings "
-                                     "from lists of words. The default word is kapu.")
+    parser = argparse.ArgumentParser(
+        description="Creates funny word pairings from lists of words. The default word is kapu.")
     parser.add_argument("word", type=str, nargs='?', help="the word to use")
     parser.add_argument("-n", type=int, help="number of results to generate")
     args = parser.parse_args()
@@ -57,9 +57,7 @@ def main():
                 prefixes = cache.read_prefix(first)
                 suffixes = cache.read_suffix(second)
 
-                print("{}{}".format(
-                    choice(prefixes).rstrip(),
-                    choice(suffixes).rstrip()))
+                print(f"{choice(prefixes).rstrip()}{choice(suffixes).rstrip()}")
             num_words -= 1
 
         except IndexError:
