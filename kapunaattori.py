@@ -48,16 +48,21 @@ def main():
 
         try:
             if first == "":
-                match = choice(cache.read_matches(second)).rstrip()
-                print(match)
+                words = cache.read_matches(second)
+                word = choice(words)
+                words.remove(word)
+                match = word.rstrip()
             elif second == "":
-                match = choice(cache.read_matches(first)).rstrip()
-                print(match)
+                words = cache.read_matches(first)
+                word = choice(words)
+                words.remove(word)
+                match = word.rstrip()
             else:
                 prefixes = cache.read_prefix(first)
                 suffixes = cache.read_suffix(second)
+                match = f"{choice(prefixes).rstrip()}{choice(suffixes).rstrip()}"
 
-                print(f"{choice(prefixes).rstrip()}{choice(suffixes).rstrip()}")
+            print(match)
             num_words -= 1
 
         except IndexError:
