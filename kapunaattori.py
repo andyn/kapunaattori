@@ -45,13 +45,21 @@ def main():
 
     while num_words > 0 and len(parts) > 0:
         first, second = choice(parts)
-        try:
-            prefixes = cache.read_prefix(first)
-            suffixes = cache.read_suffix(second)
 
-            print("{}{}".format(
-                choice(prefixes).rstrip(),
-                choice(suffixes).rstrip()))
+        try:
+            if first == "":
+                match = choice(cache.read_matches(second)).rstrip()
+                print(match)
+            elif second == "":
+                match = choice(cache.read_matches(first)).rstrip()
+                print(match)
+            else:
+                prefixes = cache.read_prefix(first)
+                suffixes = cache.read_suffix(second)
+
+                print("{}{}".format(
+                    choice(prefixes).rstrip(),
+                    choice(suffixes).rstrip()))
             num_words -= 1
 
         except IndexError:

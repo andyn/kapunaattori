@@ -7,7 +7,7 @@ import os
 import shutil
 import time
 
-# A simple class that allows opening files from a certain directory.
+# A simple class that allows opening files from a given directory.
 # Makes sure that the directory exists.
 
 
@@ -17,7 +17,7 @@ class Directory(object):
         try:
             self.directory = base_directory
             os.makedirs(self.directory)
-        # FIXME Pokemon exceptions because ocumentation says "except error" but
+        # FIXME Pokemon exceptions because documentation says "except error" but
         # it does not work
         except:
             # Already exists
@@ -37,13 +37,17 @@ class WordCache(object):
         # Remove and recreate cache directories if needed
         prefix_dir = "{}/prefix".format(cache_directory)
         suffix_dir = "{}/suffix".format(cache_directory)
+        match_dir = "{}/matches".format(cache_directory)
         self.remove_if_older_than(prefix_dir, wordlist_directory)
         self.remove_if_older_than(suffix_dir, wordlist_directory)
+        self.remove_if_older_than(match_dir, wordlist_directory)
         self.prefixes = Directory(prefix_dir)
         self.suffixes = Directory(suffix_dir)
+        self.matches = Directory(match_dir)
         self.wordlists = wordlist_directory
         self.cached_prefixes = {}
         self.cached_suffixes = {}
+        self.cached_matches = {}
 
     def create_file(self, target, filter):
         from os import listdir
@@ -97,6 +101,9 @@ class WordCache(object):
     def open_suffix(self, name):
         return self.open(self.suffixes, name, lambda l: l.startswith(name))
 
+    def open_matches(self, name):
+        return self.open(self.matches, name, lambda l: name in l)
+
     # TODO refactor these two into one large function
     def read_prefix(self, name):
         cached = self.cached_prefixes.get(name)
@@ -116,4 +123,14 @@ class WordCache(object):
         handle = self.open_suffix(name)
         lines = handle.readlines()
         self.cached_suffixes[name] = lines
+        return lines
+
+    def read_matches(self, name):
+        cached = self.cached_matches.get(name)
+        if cached:
+            return cached
+
+        handle = self.open_matches(name)
+        lines = handle.readlines()
+        self.cached_matches[name] = lines
         return lines
