@@ -45,9 +45,9 @@ class WordCache(object):
         self.suffixes = Directory(suffix_dir)
         self.matches = Directory(match_dir)
         self.wordlists = wordlist_directory
-        self.cached_prefixes = {}
-        self.cached_suffixes = {}
-        self.cached_matches = {}
+        self.cached_prefixes = None
+        self.cached_suffixes = None
+        self.cached_matches = None
 
     def create_file(self, target, filter):
         from os import listdir
@@ -106,31 +106,25 @@ class WordCache(object):
 
     # TODO refactor these two into one large function
     def read_prefix(self, name):
-        cached = self.cached_prefixes.get(name)
-        if cached:
-            return cached
-
-        handle = self.open_prefix(name)
-        lines = handle.readlines()
-        self.cached_prefixes[name] = lines
-        return lines
+        if self.cached_prefixes is None:
+            handle = self.open_matches(name)
+            lines = handle.readlines()
+            self.cached_prefixes = {name: lines}
+        
+        return self.cached_prefixes.get(name, [])
 
     def read_suffix(self, name):
-        cached = self.cached_suffixes.get(name)
-        if cached:
-            return cached
-
-        handle = self.open_suffix(name)
-        lines = handle.readlines()
-        self.cached_suffixes[name] = lines
-        return lines
+        if self.cached_suffixes is None:
+            handle = self.open_matches(name)
+            lines = handle.readlines()
+            self.cached_suffixes = {name: lines}
+        
+        return self.cached_suffixes.get(name, [])
 
     def read_matches(self, name):
-        cached = self.cached_matches.get(name)
-        if cached:
-            return cached
-
-        handle = self.open_matches(name)
-        lines = handle.readlines()
-        self.cached_matches[name] = lines
-        return lines
+        if self.cached_matches is None:
+            handle = self.open_matches(name)
+            lines = handle.readlines()
+            self.cached_matches = {name: lines}
+        
+        return self.cached_matches.get(name)
